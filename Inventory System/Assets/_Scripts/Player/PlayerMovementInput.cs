@@ -59,12 +59,12 @@ public class PlayerMovementInput : MonoBehaviour
     [Header("Player Animation")]
     [Space(10)]
 
-    public Animator _animator;
+    private Animator _animator;
 
-    public string WALK_ANIM_PARAM = "speed";
-    public string GROUND_ANIM_PARAM = "grounded";
-    public string JUMP_ANIM_PARAM = "jump";
-    public string FREEFALL_ANIM_PARAM = "freefall";
+    private string WALK_ANIM_PARAM = "speed";
+    private string GROUND_ANIM_PARAM = "grounded";
+    private string JUMP_ANIM_PARAM = "jump";
+    private string FREEFALL_ANIM_PARAM = "freefall";
 
     // animation IDs
     [HideInInspector] public int _animIDSpeed;
@@ -121,7 +121,7 @@ public class PlayerMovementInput : MonoBehaviour
         _animIDGrounded = Animator.StringToHash(GROUND_ANIM_PARAM);
         _animIDJump = Animator.StringToHash(JUMP_ANIM_PARAM);
         _animIDFreeFall = Animator.StringToHash(FREEFALL_ANIM_PARAM);
-        //_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        
     }
     private void AddingGravity(float jumpFloat)
     {
@@ -195,15 +195,14 @@ public class PlayerMovementInput : MonoBehaviour
         float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.Move.magnitude : 1f;
 
-        // accelerate or decelerate to target speed
         if (currentHorizontalSpeed < targetSpeed - speedOffset ||
             currentHorizontalSpeed > targetSpeed + speedOffset)
         {
-            // creates curved result rather than a linear one giving a more organic speed change
+            
             _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
                 Time.deltaTime * SpeedChangeRate);
 
-            // round speed to 3 decimal places
+         
             _speed = Mathf.Round(_speed * 1000f) / 1000f;
         }
         else
@@ -244,7 +243,7 @@ public class PlayerMovementInput : MonoBehaviour
         if (_hasAnimator)
         {
             _animator.SetFloat(_animIDSpeed, _animationBlend);
-            //_animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            
         }
     }
 

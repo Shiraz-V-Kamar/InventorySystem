@@ -5,24 +5,22 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-
-    private int MaxStackedItems = 5;
-
     [SerializeField] private InventorySlot[] _inventorySlots;
-
     [SerializeField] private GameObject _inventoryItemPrefab;
 
+    private int MaxStackedItems = 5;
     private int _selectedSlot = 1;
+    
+    private bool hasGun = false;
     
     InputsManager _inputs;
     LevelManager _levelManager;
 
-    private bool hasGun = false;
 
 
     public Action OnSelectedSlotChanged;
     public Action<ItemType, int> OnItemDropped;
-    private bool hasBullet;
+    public bool hasBullet= false;
 
     private void Awake()
     {
@@ -110,6 +108,7 @@ public class InventoryManager : MonoBehaviour
         _selectedSlot = Value;
         OnSelectedSlotChanged?.Invoke();
     }
+
     public void SpawnNewItem(ItemScriptableObject item, Transform InventorySlot)
     {
         GameObject newItem = Instantiate(_inventoryItemPrefab, InventorySlot.transform);

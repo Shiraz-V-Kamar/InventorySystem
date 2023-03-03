@@ -31,7 +31,7 @@ public class InputsManager : MonoBehaviour
     public bool analogMovement;
 
     [Header("Mouse Cursor Settings")]
-    public bool cursorLocked = true;
+   /* public bool cursorLocked = true;*/
     public bool cursorInputForLook = true;
 
     
@@ -235,14 +235,14 @@ private void OnReloadPressed(bool isPressed)
 
     }
 
-    private void OnApplicationFocus(bool hasFocus)
+/*    private void OnApplicationFocus(bool hasFocus)
     {
         SetCursorState(cursorLocked);
-    }
+    }*/
 
-    private void SetCursorState(bool newState)
+  /*  private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-    }
+    }*/
 }
 

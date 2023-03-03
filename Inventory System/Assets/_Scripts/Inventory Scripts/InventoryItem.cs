@@ -12,6 +12,8 @@ public class InventoryItem : MonoBehaviour
     public TextMeshProUGUI ItemName;
     public TextMeshProUGUI SlotId;
 
+    public GameObject SlotIconHolder;
+
     [HideInInspector]public ItemScriptableObject Item;
     [HideInInspector] public int Count = 1;
 
@@ -33,5 +35,6 @@ public class InventoryItem : MonoBehaviour
 
         bool showText = Count > 1;
         CountText.gameObject.SetActive(showText);
+        SlotIconHolder.SetActive(showText); 
     }
 }

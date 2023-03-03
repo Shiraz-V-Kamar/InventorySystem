@@ -15,16 +15,20 @@ public class LevelManager : MonoBehaviour
 
     private bool _isHoldingGun;
 
-    [Header("UI stuff")]
+    [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI _bulletCountText;
     [SerializeField] private TextMeshProUGUI _camerasToDestroyedCountText;
     [SerializeField] private TextMeshProUGUI _gameOverCameraDestroyedCountText;
     [SerializeField] private TextMeshProUGUI _currentItemText;
+    [SerializeField] private TextMeshProUGUI _helperText;
     [SerializeField] private Image _crosshairImage;
     [SerializeField] private Image _currentItemImage;
     [SerializeField] private Sprite _noItemImage;
+
+    [Header("All Panels")]
     [SerializeField] private GameObject[] _allPanel;
 
+    [Header("Scripts")]
     [SerializeField] PlayerHandleItem _playerHandlItem;
     [SerializeField] PlayerShoot _playerShoot;
     InventoryManager _inventoryManager;
@@ -111,7 +115,7 @@ public class LevelManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             _inputs.cursorInputForLook = true;
         }
-        else if (_isGameOver || _gameWon)
+        else if (_isGameOver || _gameWon )
         {
             _inputs.cursorInputForLook = false;
             Cursor.lockState = CursorLockMode.None;
@@ -194,6 +198,7 @@ public class LevelManager : MonoBehaviour
         {
             _allPanel[(int)state].SetActive(isGamePaused);
             _inputs.cursorInputForLook = false;
+            Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0;
         }
         else if (state == GameStates.Inventory)
@@ -226,6 +231,17 @@ public class LevelManager : MonoBehaviour
     private void SetUITexts()
     {
         _bulletCountText.text = BulletCount.ToString();
+        if(BulletCount<1)
+        {
+            _bulletCountText.color = Color.red;
+            _helperText.text = "Reload";
+        }
+        else
+        {
+            _bulletCountText.color = Color.white;
+            _helperText.text = "";
+        }
+       
         _camerasToDestroyedCountText.text = _camerasToDestroyedCount.ToString();
         _gameOverCameraDestroyedCountText.text = _camerasDestroyedCount.ToString();
     }
@@ -282,5 +298,10 @@ public class LevelManager : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
