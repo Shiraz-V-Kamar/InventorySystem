@@ -13,82 +13,71 @@ public class Gun : MonoBehaviour
     [SerializeField] private LayerMask _shootLayerMask;
     [SerializeField] private int _damageAmount = 1;
     [SerializeField] float ImpactoffsetVal = 0;
+    [SerializeField] private ParticleSystem _shootingSystem;
 
-
-    private int _shootDistance;
     private GameObject _bulletParticleSystem;
-    private ParticleSystem _shootingSystem;
     private ParticleSystem _impactParticleSystem;
     private TrailRenderer _bulletTrail;
-    private int bulletCount;
 
-
+    private int _shootDistance;
     private float _lastShootTime;
 
-    public InputsManager _inputsManager;
+    [SerializeField] private WeaponScriptableObject _weaponScriptableObject;
+
+
+    private LevelManager _levelManager;
     //AudioManager _audioManager;
 
     public Action OnShootDecreaseBulletCount;
-    public Action<int> OnWallShot;
-    public Action<bool> OnShootingAimAt;
+    public Action<bool> OnGettingTargetInAim;
 
     private void Start()
     {
         //_audioManager = AudioManager.instance;
-        _inputsManager = InputsManager.instance;
         //playerCollisions.OnCollecting += SetBulletCount;
+        _levelManager = LevelManager.instance;
+        SetupWeaponDetails(_weaponScriptableObject);
     }
-
-    private void SetBulletCount(int obj)
+    private void SetupWeaponDetails(WeaponScriptableObject element)
     {
-        bulletCount = obj;
+        _bulletParticleSystem = element.BulletParticleSystem;
+        _impactParticleSystem = element.ImpactParticleSystem;
+        _bulletTrail = element.BulletTrail;
+
+        _shootDistance = element.ShootDistance;
     }
-
-    public void Shoot(bool ShootPressed)
+    public void Shoot()
     {
-        bool shootPressed = ShootPressed;
-        if (!shootPressed)
-            return;
 
-        if (_lastShootTime + shootDelay < Time.time && bulletCount > 0)
+        Vector3 direction = GetDirection();
+        Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, _shootDistance, _shootLayerMask))
         {
-            OnShootDecreaseBulletCount?.Invoke();
-
-            _shootingSystem.Play();
-            Vector3 direction = GetDirection();
-            Ray ray = Camera.main.ScreenPointToRay(_inputsManager.MousePos);
-            RaycastHit hit;
-            
-            if (Physics.Raycast(ray, out hit, float.MaxValue, _shootLayerMask) && shootPressed)
+            if (_lastShootTime + shootDelay < Time.time && _levelManager.BulletCount > 0)
             {
-                if (hit.collider.transform != null)
-                {
-                    // Play the sound
-                    //_audioManager.PlaySound("Element Projectile");
-                    OnWallShot?.Invoke(5);
-                    bulletCount--;
+                _shootingSystem.Play();
+                // Play the sound
+                //_audioManager.PlaySound("Element Projectile");
+                OnShootDecreaseBulletCount?.Invoke();
+                _levelManager.DecrementBulletCount();
 
-                    TrailRenderer trail = Instantiate(_bulletTrail, _bulletSpawnPoint.position, Quaternion.identity);
-                    trail.enabled = false;
-                    GameObject trailParticle = Instantiate(_bulletParticleSystem, _bulletSpawnPoint.position, Quaternion.identity, trail.transform.parent);
-                    trailParticle.transform.localPosition = Vector3.zero;
+                TrailRenderer trail = Instantiate(_bulletTrail, _bulletSpawnPoint.position, Quaternion.identity);
+                trail.enabled = false;
+                GameObject trailParticle = Instantiate(_bulletParticleSystem, _bulletSpawnPoint.position, Quaternion.identity, trail.transform.parent);
+                trailParticle.transform.localPosition = Vector3.zero;
 
-                    StartCoroutine(SpawnTrail(trail, hit, trailParticle));
-                    // Damage the hit item 
-                    _lastShootTime = Time.time;
-                    OnShootingAimAt?.Invoke(true);
-
-                }
+                StartCoroutine(SpawnTrail(trail, hit, trailParticle));
+                // Damage the hit item 
+                _lastShootTime = Time.time;
+                
+                
             }
         }
+                OnGettingTargetInAim?.Invoke(false);
     }
-
-    /*private void SetupBulletDetails(ItemScriptableObject element)
-    {
-        _bulletParticleSystem = element.;
-        _impactParticleSystem = element.;
-        _bulletTrail = element.;
-    }*/
 
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit, GameObject trailParticle)
     {
@@ -103,19 +92,26 @@ public class Gun : MonoBehaviour
 
             yield return null;
         }
-        
+
         trail.transform.position = hit.point;
 
         Vector3 offsetPos = new Vector3(hit.point.x, hit.point.y, hit.point.z - ImpactoffsetVal);
 
         //PlayImapctSound
-
-        Instantiate(_impactParticleSystem, offsetPos, Quaternion.LookRotation(hit.normal));
+        //Play normal impact
+        if (hit.collider.tag == Helper.CAMERA_TAG)
+        {
+            OnGettingTargetInAim?.Invoke(true);
+            // Destroyed particle system
+            HandleStreetCam cam = hit.collider.GetComponent<HandleStreetCam>();
+            cam.DealDamage();
+            Instantiate(_impactParticleSystem, offsetPos, Quaternion.LookRotation(hit.normal));
+        }
 
 
         Destroy(trail.gameObject, trail.time);
         Destroy(trailParticle.gameObject, trail.time);
-        OnShootingAimAt?.Invoke(false);
+
     }
 
     private Vector3 GetDirection()
@@ -135,6 +131,5 @@ public class Gun : MonoBehaviour
 
         return direction;
     }
-
 
 }

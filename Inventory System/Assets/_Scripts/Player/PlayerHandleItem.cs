@@ -7,6 +7,7 @@ public class PlayerHandleItem : MonoBehaviour
 {
     InventoryManager _inventoryManager;
     InputsManager _inputs;
+    LevelManager _levelManager;
 
     [SerializeField] private GameObject _gunObj;
 
@@ -15,21 +16,35 @@ public class PlayerHandleItem : MonoBehaviour
     private int ItemDropCount;
 
     [SerializeField]private ItemType currentItemType;
+    [SerializeField]private int _itemDropCount;
     [SerializeField] private Transform _prefabHolder;
     [SerializeField] private Transform _dropItemSpawnPos;
     [SerializeField] private GameObject[] _objPrefab;
     [SerializeField]private float spawnRadius = 5f;
 
     [SerializeField] private float _scatterForce;
+
+    public Action<bool> OnHoldingGun;
     private void Start()
     {
         _inventoryManager = InventoryManager.Instance;
         _inputs = InputsManager.instance;
+        _levelManager = LevelManager.instance;
         _inventoryManager.OnSelectedSlotChanged += SelectTheItem;
+        _inventoryManager.OnItemDropped += ItemDroped;
     }
+
+
     private void OnDisable()
     {
         _inventoryManager.OnSelectedSlotChanged -= SelectTheItem;
+        _inventoryManager.OnItemDropped -= ItemDroped;
+    }
+    private void ItemDroped(ItemType type,int dropCount)
+    {
+        currentItemType = type;
+        _itemDropCount = dropCount;
+        GetSelectedItem();
     }
     private void SelectTheItem()
     {
@@ -55,46 +70,53 @@ public class PlayerHandleItem : MonoBehaviour
             if (currentItem.Type == ItemType.Gun)
             {
                 _gunObj.SetActive(true);
+                OnHoldingGun?.Invoke(true);
             }
             else
             {
                 _gunObj.SetActive(false);
+                OnHoldingGun?.Invoke(false);
             }
+
+            if(currentItem.Type == ItemType.Bullets && _levelManager.BulletCount==0 && _gunObj.activeSelf)
+            {
+                _inventoryManager.UseBulletItem();
+            }
+
+        }else
+        {
+             OnHoldingGun?.Invoke(false);
+            _gunObj.SetActive(false);
         }
+        
+       
     }
 
     public void DropSelectedItem()
-    {
-        GetSelectedItem();
-        
-        int ItemCount = _inventoryManager.DropSelectedItem();
-        if (ItemCount > 0)
-        {
-            ItemDropCount = ItemCount;
+    {   
+        _inventoryManager.DropSelectedItem();
 
-            currentItemType = currentItem.Type;
+        if (_itemDropCount > 0)
+        {
             switch (currentItemType)
             {
                 case ItemType.Gun:
                     {
-                        ScatterDroppedItem(_objPrefab[0], ItemDropCount);
+                        ScatterDroppedItem(_objPrefab[0], _itemDropCount);
                         break;
                     }
                 case ItemType.Bullets:
                     {
-                        ScatterDroppedItem(_objPrefab[1], ItemDropCount);
+                        ScatterDroppedItem(_objPrefab[1], _itemDropCount);
                         break;
                     }
                 case ItemType.MedicKit:
                     {
-                        ScatterDroppedItem(_objPrefab[2], ItemDropCount);
+                        ScatterDroppedItem(_objPrefab[2], _itemDropCount);
                         break;
                     }
             }
         }
-       
-
-       
     }
 
     private void ScatterDroppedItem(GameObject Prefab, int SpawnCount)

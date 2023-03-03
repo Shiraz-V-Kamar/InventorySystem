@@ -64,6 +64,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Aim"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""0c9da90d-a6f3-4765-b482-be4bb6ea1a1a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""DropItem"",
                     ""type"": ""Value"",
                     ""id"": ""b72e5424-b411-44db-ba1b-3b30b58e7359"",
@@ -89,6 +98,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c69a03e6-4ec7-4fb4-a8a7-1cf08f8c6d46"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Slot 1"",
@@ -154,13 +172,13 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Pointer"",
-                    ""type"": ""Value"",
-                    ""id"": ""8f7a7eb5-52ce-40d7-9a0f-7c98dcc7188b"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""f4dd362c-7400-4462-b3b1-37bc4e63f8ec"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -496,12 +514,67 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0f28b9fb-baa2-45d9-b412-2279f9057ff1"",
-                    ""path"": ""<Mouse>/position"",
+                    ""id"": ""781d93ba-24d0-452d-b14c-f5f872ec2361"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6905b1ff-1aa6-413b-8c3c-2870f9f3d644"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60ecb892-3e30-41a0-97f3-b95cda56075d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88387b03-c3b7-4bae-a9f6-ff5cc42ec188"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4db32d2f-bdaa-4145-b9a4-121bf121382e"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22b4db1e-70b4-40a6-a5f3-ce78ed1d2685"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pointer"",
+                    ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -554,9 +627,11 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_DropItem = m_Player.FindAction("DropItem", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
+        m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_Slot1 = m_Player.FindAction("Slot 1", throwIfNotFound: true);
         m_Player_Slot2 = m_Player.FindAction("Slot 2", throwIfNotFound: true);
         m_Player_Slot3 = m_Player.FindAction("Slot 3", throwIfNotFound: true);
@@ -564,7 +639,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_Slot5 = m_Player.FindAction("Slot 5", throwIfNotFound: true);
         m_Player_Slot6 = m_Player.FindAction("Slot 6", throwIfNotFound: true);
         m_Player_Slot7 = m_Player.FindAction("Slot 7", throwIfNotFound: true);
-        m_Player_Pointer = m_Player.FindAction("Pointer", throwIfNotFound: true);
+        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -628,9 +703,11 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_DropItem;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_UseItem;
+    private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_Slot1;
     private readonly InputAction m_Player_Slot2;
     private readonly InputAction m_Player_Slot3;
@@ -638,7 +715,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Slot5;
     private readonly InputAction m_Player_Slot6;
     private readonly InputAction m_Player_Slot7;
-    private readonly InputAction m_Player_Pointer;
+    private readonly InputAction m_Player_Reload;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -647,9 +724,11 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @DropItem => m_Wrapper.m_Player_DropItem;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
+        public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @Slot1 => m_Wrapper.m_Player_Slot1;
         public InputAction @Slot2 => m_Wrapper.m_Player_Slot2;
         public InputAction @Slot3 => m_Wrapper.m_Player_Slot3;
@@ -657,7 +736,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Slot5 => m_Wrapper.m_Player_Slot5;
         public InputAction @Slot6 => m_Wrapper.m_Player_Slot6;
         public InputAction @Slot7 => m_Wrapper.m_Player_Slot7;
-        public InputAction @Pointer => m_Wrapper.m_Player_Pointer;
+        public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -679,6 +758,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                @Aim.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
                 @DropItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropItem;
                 @DropItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropItem;
                 @DropItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropItem;
@@ -688,6 +770,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @UseItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseItem;
                 @UseItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseItem;
                 @UseItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseItem;
+                @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Slot1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot1;
                 @Slot1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot1;
                 @Slot1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot1;
@@ -709,9 +794,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Slot7.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot7;
                 @Slot7.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot7;
                 @Slot7.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot7;
-                @Pointer.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPointer;
-                @Pointer.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPointer;
-                @Pointer.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPointer;
+                @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -728,6 +813,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
                 @DropItem.started += instance.OnDropItem;
                 @DropItem.performed += instance.OnDropItem;
                 @DropItem.canceled += instance.OnDropItem;
@@ -737,6 +825,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @UseItem.started += instance.OnUseItem;
                 @UseItem.performed += instance.OnUseItem;
                 @UseItem.canceled += instance.OnUseItem;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
                 @Slot1.started += instance.OnSlot1;
                 @Slot1.performed += instance.OnSlot1;
                 @Slot1.canceled += instance.OnSlot1;
@@ -758,9 +849,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Slot7.started += instance.OnSlot7;
                 @Slot7.performed += instance.OnSlot7;
                 @Slot7.canceled += instance.OnSlot7;
-                @Pointer.started += instance.OnPointer;
-                @Pointer.performed += instance.OnPointer;
-                @Pointer.canceled += instance.OnPointer;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -789,9 +880,11 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
         void OnDropItem(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnUseItem(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
         void OnSlot1(InputAction.CallbackContext context);
         void OnSlot2(InputAction.CallbackContext context);
         void OnSlot3(InputAction.CallbackContext context);
@@ -799,6 +892,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnSlot5(InputAction.CallbackContext context);
         void OnSlot6(InputAction.CallbackContext context);
         void OnSlot7(InputAction.CallbackContext context);
-        void OnPointer(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

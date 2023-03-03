@@ -11,11 +11,20 @@ public class InputsManager : MonoBehaviour
     public Vector2 Look;
     public bool IsJump;
     public bool IsSprint;
+
+    [Header("Inputs for Gun Mechanic")]
+    public bool AimPressed;
+    public bool ShootPressed;
+    public bool ReloadPressed;
+
+    [Header("Inventory interactions")]
     public bool InteractPressed;
     public bool UseItemPressed;
     public bool DropItemPressed;
+
+    
     public bool Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Slot7;
-    public Vector2 MousePos { get; private set; }
+    
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -107,17 +116,37 @@ public class InputsManager : MonoBehaviour
         Slot7Pressed(value.isPressed);
     }
 
-    public void OnPointer(InputValue value)
+    public void OnShoot(InputValue value)
     {
-        PointerPos(value.Get<Vector2>());
+        OnShootPressed(value.isPressed);
     }
+
+    public void OnAim(InputValue value)
+    {
+        OnAimPressed(value.isPressed);
+    }
+
+    public void OnReload(InputValue value)
+    {
+        OnReloadPressed(value.isPressed);
+    }
+
 
 
     // Passing Values into Public fields 
-    private void PointerPos(Vector2 vector2)
+    private void OnReloadPressed(bool isPressed)
     {
-        MousePos = vector2;
+        ReloadPressed = isPressed;
     }
+    private void OnAimPressed(bool isPressed)
+    {
+        AimPressed = isPressed;
+    }
+    private void OnShootPressed(bool isPressed)
+    {
+        ShootPressed = isPressed;
+    }
+   
 
     private void DropItem(bool isPressed)
     {

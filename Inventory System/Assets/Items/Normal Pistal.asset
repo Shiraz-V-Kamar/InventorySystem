@@ -16,8 +16,13 @@ MonoBehaviour:
   Name: Normal Pistal
   Description: This is a normal Pistal which is a unique weapon
   IsStackable: 0
+  IsUnique: 1
   Image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   FireRate: 25
-  ShootDistance: 5
-  BulletCount: 5
-  WeaponPrefab: {fileID: 0}
+  ShootDistance: 150
+  ImpactParticleSystem: {fileID: 2433282508523890284, guid: 36cc016f563e2644e8ea58a0a46d8de6,
+    type: 3}
+  BulletParticleSystem: {fileID: 3652794380673614938, guid: eddc1e0ce123d5b4fb4fc4029d3eef24,
+    type: 3}
+  BulletTrail: {fileID: 1335374041276864151, guid: c5e353eff96baae488a3c4df9094367a,
+    type: 3}

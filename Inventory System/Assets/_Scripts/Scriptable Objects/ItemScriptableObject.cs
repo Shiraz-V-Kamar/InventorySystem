@@ -14,6 +14,7 @@ public class ItemScriptableObject : ScriptableObject
     public string Name;
     public string Description;
     public bool IsStackable;
+    public bool IsUnique;
     public Sprite Image;
-    public GameObject ItemPrefab;
+
 }

@@ -14,9 +14,15 @@ public class InventoryManager : MonoBehaviour
 
     private int _selectedSlot = -1;
     InputsManager _inputs;
-    private float _itemUseTimeoutDelta;
+    LevelManager _levelManager;
+
     [SerializeField] private float _itemUseTimeout;
+    private bool hasGun = false;
+
+
     public Action OnSelectedSlotChanged;
+    public Action<ItemType, int> OnItemDropped;
+
     private void Awake()
     {
         Instance = this;
@@ -36,7 +42,8 @@ public class InventoryManager : MonoBehaviour
     private void Start()
     {
         _inputs = InputsManager.instance;
-        ChangeSelectedSlot(0);
+        _levelManager = LevelManager.instance;
+
     }
 
     private void Update()
@@ -45,27 +52,45 @@ public class InventoryManager : MonoBehaviour
     }
     public bool AddItem(ItemScriptableObject item)
     {
-        //Checking each slot to see if the item collected can be stacked or not
-        foreach (var slot in _inventorySlots)
+
+        for (int i = 1; i < _inventorySlots.Length; i++)
         {
-            InventoryItem slotItem = slot.GetComponentInChildren<InventoryItem>();
-            if (slotItem != null && slotItem.Item == item && slotItem.Count < MaxStackedItems && item.IsStackable == true)
+            InventoryItem itemInSlot = _inventorySlots[i].GetComponentInChildren<InventoryItem>();
+
+            //Checking each slot to see if the item collected can be stacked or not
+            if (itemInSlot != null && itemInSlot.Item == item && itemInSlot.Count < MaxStackedItems && item.IsStackable == true)
             {
-                slotItem.Count++;
-                slotItem.RefreshCount();
+                itemInSlot.Count++;
+                itemInSlot.RefreshCount();
+                return true;
+            }
+
+            //For items which is not stackable and is not unique store them in empty slot
+            if (itemInSlot == null && item.IsUnique == false)
+            {
+                SpawnNewItem(item, _inventorySlots[i].transform);
                 return true;
             }
         }
+    
 
-        //Find an empty slot to store the Item
-        foreach (var slot in _inventorySlots)
+        //checking if first slot has unique item, spawn if there is none
+        Transform firstSlot = _inventorySlots[0].transform;
+        InventoryItem itemInSlotOne = _inventorySlots[0].GetComponentInChildren<InventoryItem>();
+        if (itemInSlotOne == null)
         {
-            InventoryItem slotItem = slot.GetComponentInChildren<InventoryItem>();
-            if (slotItem == null)
-            {
-                SpawnNewItem(item, slot.transform);
-                return true;
-            }
+
+            SpawnNewItem(item, firstSlot);
+
+            ChangeSelectedSlot(0);
+            OnSelectedSlotChanged?.Invoke();
+            return true;
+
+
+        }
+        else
+        {
+            hasGun = true;
         }
         return false;
     }
@@ -82,8 +107,8 @@ public class InventoryManager : MonoBehaviour
     public void SpawnNewItem(ItemScriptableObject item, Transform InventorySlot)
     {
         GameObject newItem = Instantiate(_inventoryItemPrefab, InventorySlot.transform);
-        InventoryItem inventoryItem = newItem.GetComponent<InventoryItem>();
-        inventoryItem.InitializeItems(item);
+        InventoryItem itemInSlot = newItem.GetComponent<InventoryItem>();
+        itemInSlot.InitializeItems(item);
     }
 
     public ItemScriptableObject GetSelectedItem()
@@ -121,12 +146,31 @@ public class InventoryManager : MonoBehaviour
                 }
                 _inputs.UseItemPressed = false;
             }
-
-
         }
     }
 
-    public int DropSelectedItem()
+    public void UseBulletItem()
+    {
+        // Checking if there is any bullet available then reduce itemCount by 1 and increase bulletCount 
+        foreach (var slot in _inventorySlots)
+        {
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null && itemInSlot.Item.Type == ItemType.Bullets && itemInSlot.Count > 0)
+            {
+                itemInSlot.Count--;
+                itemInSlot.RefreshCount();
+                _levelManager.SetBulletCount();
+
+                if (itemInSlot.Count == 0)
+                {
+                    Destroy(itemInSlot.gameObject);
+                }
+                break;
+            }
+        }
+    }
+
+    public void DropSelectedItem()
     {
         _inputs.DropItemPressed = false;
         InventorySlot slot = _inventorySlots[_selectedSlot];
@@ -134,11 +178,15 @@ public class InventoryManager : MonoBehaviour
         if (itemInSlot != null)
         {
             ItemScriptableObject item = itemInSlot.Item;
-            Destroy(itemInSlot.gameObject);
-            return itemInSlot.Count;
-        }
-        else
-            return 0;
+            int count = itemInSlot.Count;
 
+            OnItemDropped?.Invoke(item.Type, count);
+            if (item.Type == ItemType.Gun)
+            {
+                hasGun = false;
+            }
+            DestroyImmediate(itemInSlot.gameObject);
+            ChangeSelectedSlot(_selectedSlot);
+        }
     }
 }

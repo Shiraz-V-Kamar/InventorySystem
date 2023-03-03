@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Aim",
+                    "type": "PassThrough",
+                    "id": "0c9da90d-a6f3-4765-b482-be4bb6ea1a1a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "DropItem",
                     "type": "Value",
                     "id": "b72e5424-b411-44db-ba1b-3b30b58e7359",
@@ -67,6 +76,15 @@
                     "processors": "",
                     "interactions": "Press(behavior=2)",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Shoot",
+                    "type": "PassThrough",
+                    "id": "c69a03e6-4ec7-4fb4-a8a7-1cf08f8c6d46",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Slot 1",
@@ -132,13 +150,13 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pointer",
-                    "type": "Value",
-                    "id": "8f7a7eb5-52ce-40d7-9a0f-7c98dcc7188b",
-                    "expectedControlType": "Vector2",
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "f4dd362c-7400-4462-b3b1-37bc4e63f8ec",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -474,12 +492,67 @@
                 },
                 {
                     "name": "",
-                    "id": "0f28b9fb-baa2-45d9-b412-2279f9057ff1",
-                    "path": "<Mouse>/position",
+                    "id": "781d93ba-24d0-452d-b14c-f5f872ec2361",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6905b1ff-1aa6-413b-8c3c-2870f9f3d644",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "60ecb892-3e30-41a0-97f3-b95cda56075d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "88387b03-c3b7-4bae-a9f6-ff5cc42ec188",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4db32d2f-bdaa-4145-b9a4-121bf121382e",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22b4db1e-70b4-40a6-a5f3-ce78ed1d2685",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pointer",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

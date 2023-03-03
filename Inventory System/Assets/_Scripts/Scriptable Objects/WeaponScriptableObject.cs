@@ -4,7 +4,10 @@ using UnityEngine;
 public class WeaponScriptableObject : ItemScriptableObject
 {
     public float FireRate;
-    public float ShootDistance;
-    public int BulletCount;
-    
+    public int ShootDistance;
+
+    [Header("Bullet Effects")]
+    public ParticleSystem ImpactParticleSystem;
+    public GameObject BulletParticleSystem;
+    public TrailRenderer BulletTrail;
 }
