@@ -9,6 +9,7 @@ public class HandleStreetCam : MonoBehaviour
 
     LevelManager levelManager;
     Timer timer;
+    [SerializeField] private Outline _outline;
 
     private void Start()
     {
@@ -18,7 +19,6 @@ public class HandleStreetCam : MonoBehaviour
     public void DealDamage()
     {
         health -= 5;
-        Debug.Log("Dealing Damage");
     }
 
     private void Update()
@@ -30,6 +30,7 @@ public class HandleStreetCam : MonoBehaviour
             _isCameraDamaged = true;
             levelManager.AddCameraDestroyedCount();
             timer.AddTime();
+            _outline.OutlineWidth = 0;
         }
     }
 }

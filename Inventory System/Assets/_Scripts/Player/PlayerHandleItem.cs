@@ -11,11 +11,10 @@ public class PlayerHandleItem : MonoBehaviour
 
     [SerializeField] private GameObject _gunObj;
 
-
-    private ItemScriptableObject currentItem;
+    [HideInInspector]public ItemScriptableObject currentItem;
     private int ItemDropCount;
 
-    [SerializeField]private ItemType currentItemType;
+    public ItemType CurrentItemType;
     [SerializeField]private int _itemDropCount;
     [SerializeField] private Transform _prefabHolder;
     [SerializeField] private Transform _dropItemSpawnPos;
@@ -33,8 +32,6 @@ public class PlayerHandleItem : MonoBehaviour
         _inventoryManager.OnSelectedSlotChanged += SelectTheItem;
         _inventoryManager.OnItemDropped += ItemDroped;
     }
-
-
     private void OnDisable()
     {
         _inventoryManager.OnSelectedSlotChanged -= SelectTheItem;
@@ -42,7 +39,7 @@ public class PlayerHandleItem : MonoBehaviour
     }
     private void ItemDroped(ItemType type,int dropCount)
     {
-        currentItemType = type;
+        CurrentItemType = type;
         _itemDropCount = dropCount;
         GetSelectedItem();
     }
@@ -61,7 +58,10 @@ public class PlayerHandleItem : MonoBehaviour
         {
             DropSelectedItem();
         }
+        
     }
+
+   
     public void GetSelectedItem()
     {
         currentItem = _inventoryManager.GetSelectedItem();
@@ -88,8 +88,6 @@ public class PlayerHandleItem : MonoBehaviour
              OnHoldingGun?.Invoke(false);
             _gunObj.SetActive(false);
         }
-        
-       
     }
 
     public void DropSelectedItem()
@@ -98,7 +96,7 @@ public class PlayerHandleItem : MonoBehaviour
 
         if (_itemDropCount > 0)
         {
-            switch (currentItemType)
+            switch (CurrentItemType)
             {
                 case ItemType.Gun:
                     {
@@ -137,4 +135,6 @@ public class PlayerHandleItem : MonoBehaviour
             spawnedObj.GetComponent<Rigidbody>().AddForce(randomDir * _scatterForce,ForceMode.Impulse);
         }
     }
+
+    
 }

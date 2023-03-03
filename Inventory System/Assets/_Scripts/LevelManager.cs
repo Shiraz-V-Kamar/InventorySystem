@@ -1,8 +1,10 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class LevelManager : MonoBehaviour
 {
@@ -13,18 +15,48 @@ public class LevelManager : MonoBehaviour
 
     private bool _isHoldingGun;
 
-    [Header("UI Elements")]
-    [SerializeField]private TextMeshProUGUI _bulletCountText;
-    [SerializeField]private TextMeshProUGUI _cameraDestroyedCountText;
-    [SerializeField]private TextMeshProUGUI _gameOverCameraDestroyedCountText;
+    [Header("UI stuff")]
+    [SerializeField] private TextMeshProUGUI _bulletCountText;
+    [SerializeField] private TextMeshProUGUI _camerasToDestroyedCountText;
+    [SerializeField] private TextMeshProUGUI _gameOverCameraDestroyedCountText;
+    [SerializeField] private TextMeshProUGUI _currentItemText;
     [SerializeField] private Image _crosshairImage;
-    [SerializeField] private GameObject _gameOverPanel;
-    [SerializeField] private GameObject _inGamePanel;
+    [SerializeField] private Image _currentItemImage;
+    [SerializeField] private Sprite _noItemImage;
+    [SerializeField] private GameObject[] _allPanel;
 
     [SerializeField] PlayerHandleItem _playerHandlItem;
-    InputsManager _inputsManager;
-    //Camera Stuff
+    [SerializeField] PlayerShoot _playerShoot;
+    InventoryManager _inventoryManager;
+    InputsManager _inputs;
+
+
+    [SerializeField] private GameObject[] _cameraObjs;
+
     private float _camerasDestroyedCount;
+    private float _camerasToDestroyedCount;
+    
+    [Header("Items")]
+    [SerializeField]private BulletScriptableObject bulletScriptableObject;
+    [SerializeField]private WeaponScriptableObject weaponScriptableObject;
+    [SerializeField]private MedicKitScriptableObject medicKitScriptableObject;
+    public enum GameStates
+    {
+        InGame,
+        Pause,
+        Inventory,
+        GameOver,
+        GameWon
+    }
+
+    public ItemType _currentItemType;
+    public GameStates CurrentState;
+    private bool _isGameOver;
+    private bool isInventoryOpen;
+    private bool isGamePaused;
+    private bool _gameWon;
+    private bool _changeCrosshairColor;
+
     private void Awake()
     {
         instance = this;
@@ -32,23 +64,110 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 1;
-        _playerHandlItem.OnHoldingGun += PlayerIsHoldingGun;
-        _gameOverPanel.SetActive(false);
-        _inputsManager = InputsManager.instance;
-    }
+        _inputs = InputsManager.instance;
+        _inventoryManager = InventoryManager.Instance;
 
+        //reseting timescale of GameOver
+        Time.timeScale = 1;
+
+        _playerHandlItem.OnHoldingGun += PlayerIsHoldingGun;
+        _playerShoot.OnAimingAtCamera += ChangeCrosshairColor;
+
+
+        CurrentState = GameStates.InGame;
+        _camerasToDestroyedCount = _cameraObjs.Length;
+    }
     private void OnDisable()
     {
         _playerHandlItem.OnHoldingGun -= PlayerIsHoldingGun;
+        _playerShoot.OnAimingAtCamera -= ChangeCrosshairColor;
+    }
+    private void Update()
+    {
+        SetUITexts();
+        EnableAndDisableCrosshair();
+
+
+        if (_camerasToDestroyedCount < 1)
+        {
+            GameCompleted();
+        }
+
+        // Player Inputs
+        if (!_isGameOver && !_gameWon)
+        {
+
+            if (_inputs.OpenInventoryPressed)
+            {
+                OpenInventory();
+                _inputs.OpenInventoryPressed = false;
+            }
+
+            if (_inputs.PausePressed)
+            {
+                PauseGame();
+                _inputs.PausePressed = false;
+            }
+            Cursor.lockState = CursorLockMode.Locked;
+            _inputs.cursorInputForLook = true;
+        }
+        else if (_isGameOver || _gameWon)
+        {
+            _inputs.cursorInputForLook = false;
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        ToggleUIPanel(CurrentState);
+        SetCurrentItemImage();
+    }
+
+    private void SetCurrentItemImage()
+    {
+
+        ItemScriptableObject currentItem= _inventoryManager.GetSelectedItem();
+        if (currentItem != null)
+        {
+            _currentItemType = currentItem.Type;
+
+            switch (_currentItemType)
+            {
+                case ItemType.Gun:
+                    {
+                        _currentItemImage.sprite = weaponScriptableObject.Image;
+                        _currentItemText.text = weaponScriptableObject.Name;
+                        break;
+                    }
+                case ItemType.Bullets:
+                    {
+                        _currentItemImage.sprite = bulletScriptableObject.Image;
+                        _currentItemText.text = bulletScriptableObject.Name;
+                        break;
+                    }
+                case ItemType.MedicKit:
+                    {
+                        _currentItemImage.sprite = medicKitScriptableObject.Image;
+                        _currentItemText.text = medicKitScriptableObject.Name;
+                        break;
+                    }
+            }
+        }
+        else
+        {
+            _currentItemImage.sprite = _noItemImage;
+            _currentItemText.text = "";
+        }
     }
 
     private void PlayerIsHoldingGun(bool obj)
     {
         _isHoldingGun = obj;
     }
+    private void ChangeCrosshairColor(bool obj)
+    {
+        _changeCrosshairColor = obj;
+    }
 
-    public void SetBulletCount()
+    public void SetBulletToMax()
     {
         BulletCount = MaxBulletCount;
     }
@@ -61,32 +180,97 @@ public class LevelManager : MonoBehaviour
     public void AddCameraDestroyedCount()
     {
         _camerasDestroyedCount++;
+        _camerasToDestroyedCount--;
     }
 
-    private void Update()
+
+    private void ToggleUIPanel(GameStates state)
+    {
+        foreach (var panel in _allPanel)
+        {
+            panel.SetActive(false);
+        }
+        if (state == GameStates.Pause)
+        {
+            _allPanel[(int)state].SetActive(isGamePaused);
+            _inputs.cursorInputForLook = false;
+            Time.timeScale = 0;
+        }
+        else if (state == GameStates.Inventory)
+        {
+            _allPanel[(int)state].SetActive(isInventoryOpen);
+        }
+        else
+        {
+
+            _allPanel[(int)state].SetActive(true);
+        }
+    }
+
+
+    private void PauseGame()
+    {
+        isGamePaused = !isGamePaused;
+        if (isGamePaused)
+        {
+            CurrentState = GameStates.Pause;
+        }
+        else
+        {
+            Time.timeScale = 1;
+            CurrentState = GameStates.InGame;
+        }
+
+    }
+
+    private void SetUITexts()
     {
         _bulletCountText.text = BulletCount.ToString();
+        _camerasToDestroyedCountText.text = _camerasToDestroyedCount.ToString();
+        _gameOverCameraDestroyedCountText.text = _camerasDestroyedCount.ToString();
+    }
 
-        if(_isHoldingGun)
+    private void EnableAndDisableCrosshair()
+    {
+        if (_isHoldingGun)
         {
+            if (_changeCrosshairColor)
+            {
+                _crosshairImage.color = Color.red;
+            }
+            else
+            {
+                _crosshairImage.color = Color.white;
+            }
             _crosshairImage.enabled = true;
-        }else
+        }
+        else
         {
             _crosshairImage.enabled = false;
         }
-
-        _cameraDestroyedCountText.text = _camerasDestroyedCount.ToString();
-        _gameOverCameraDestroyedCountText.text = _camerasDestroyedCount.ToString();
-
-
     }
-
+    private void OpenInventory()
+    {
+        isInventoryOpen = !isInventoryOpen;
+        if (isInventoryOpen)
+        {
+            CurrentState = GameStates.Inventory;
+        }
+        else
+        {
+            CurrentState = GameStates.InGame;
+        }
+    }
+    private void GameCompleted()
+    {
+        _gameWon = true;
+        CurrentState = GameStates.GameWon;
+        Time.timeScale = 0;
+    }
     public void GameOver()
     {
-        _inputsManager.cursorLocked = false;
-        _inputsManager.cursorInputForLook = false;
-        _inGamePanel.gameObject.SetActive(false);
-        _gameOverPanel.gameObject.SetActive(true);
+        CurrentState = GameStates.GameOver;
+        _isGameOver = true;
         Time.timeScale = 0;
     }
 

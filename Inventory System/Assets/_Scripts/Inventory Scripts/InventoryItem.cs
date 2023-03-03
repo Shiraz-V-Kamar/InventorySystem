@@ -9,6 +9,8 @@ public class InventoryItem : MonoBehaviour
     [Header("UI")]
     public Image _itemImage;
     public TextMeshProUGUI CountText;
+    public TextMeshProUGUI ItemName;
+    public TextMeshProUGUI SlotId;
 
     [HideInInspector]public ItemScriptableObject Item;
     [HideInInspector] public int Count = 1;
@@ -18,6 +20,10 @@ public class InventoryItem : MonoBehaviour
     {
         Item = _item;
         _itemImage.sprite = _item.Image;
+        ItemName.text = _item.Name;
+        InventorySlot parentSlot = transform.parent.GetComponent<InventorySlot>();
+        if (parentSlot != null)
+            SlotId.text = parentSlot.slotId.ToString();
         RefreshCount();
     }
 

@@ -16,6 +16,6 @@ MonoBehaviour:
   Name: Medical Kit
   Description: Use to heal the player
   IsStackable: 1
-  Image: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  ItemPrefab: {fileID: 0}
+  IsUnique: 0
+  Image: {fileID: 21300000, guid: 501931f596fa1224a9eef112a1a0eab7, type: 3}
   HealAmount: 25

@@ -23,6 +23,7 @@ public class PlayerShoot : MonoBehaviour
    
     private bool hasGun;
 
+    public Action<bool> OnAimingAtCamera;
     private void Start()
     {
         _inputs = InputsManager.instance;
@@ -64,6 +65,13 @@ public class PlayerShoot : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimLayerMask))
         {
+            if(hit.collider.tag== Helper.CAMERA_TAG)
+            {
+                OnAimingAtCamera?.Invoke(true);
+            }else
+            {
+                OnAimingAtCamera?.Invoke(false);
+            }
             MouseWorldPos = hit.point;
         }
 

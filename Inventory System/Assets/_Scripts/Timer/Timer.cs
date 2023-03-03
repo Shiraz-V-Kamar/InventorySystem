@@ -19,19 +19,8 @@ public class Timer : MonoBehaviour
     [SerializeField] private Image _timerImage;
 
     LevelManager _levelManager;
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            Debug.Log("Not working");
-            StopCoroutine(_timerCorutine);
-            //_timerCorutine = StartCoroutine(EnergyTimer());
-        }
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            _timerCorutine = StartCoroutine(EnergyTimer());
-        }
-    }
+    
+    
     private void Awake()
     {
         Instance = this;

@@ -16,6 +16,6 @@ MonoBehaviour:
   Name: Bullet
   Description: This is an usable Item with stackable which can be stacked
   IsStackable: 1
-  Image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  ItemPrefab: {fileID: 0}
+  IsUnique: 0
+  Image: {fileID: 21300000, guid: 4870b00c2a11c1a4a9b5265bc048e2ba, type: 3}
   BulletCount: 5

@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: This is a normal Pistal which is a unique weapon
   IsStackable: 0
   IsUnique: 1
-  Image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  Image: {fileID: 21300000, guid: 3d2826b6aab8c0f47adaef7da60b4bb7, type: 3}
   FireRate: 25
   ShootDistance: 150
   ImpactParticleSystem: {fileID: 2433282508523890284, guid: 36cc016f563e2644e8ea58a0a46d8de6,

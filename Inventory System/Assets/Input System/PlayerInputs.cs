@@ -28,6 +28,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
             ""id"": ""5f5a15ee-58af-41c7-a78b-c712673c6cb1"",
             ""actions"": [
                 {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""37a273e6-de7c-4960-b76a-50bead411e3d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""b14c015a-c044-40c9-a54d-ab772005ebfe"",
@@ -109,6 +118,24 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""aa041376-9e8e-4f7d-ba3b-a56a2bd266ec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""f4dd362c-7400-4462-b3b1-37bc4e63f8ec"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Slot 1"",
                     ""type"": ""Value"",
                     ""id"": ""009f1d33-c078-4fb0-9751-29d96b287793"",
@@ -170,15 +197,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Reload"",
-                    ""type"": ""Button"",
-                    ""id"": ""f4dd362c-7400-4462-b3b1-37bc4e63f8ec"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -558,6 +576,28 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""caec45e3-ea74-4afb-8ebb-481ec53f7671"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ec77259-36b1-4500-9cb3-511439124a1d"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""4db32d2f-bdaa-4145-b9a4-121bf121382e"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
@@ -575,6 +615,28 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7961d08-2dce-4f7e-88ad-ce559b2741eb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c07f5a4-e670-4d6f-ba75-a50b56e276a6"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -623,6 +685,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_PauseGame = m_Player.FindAction("PauseGame", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
@@ -632,6 +695,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        m_Player_OpenInventory = m_Player.FindAction("OpenInventory", throwIfNotFound: true);
+        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_Slot1 = m_Player.FindAction("Slot 1", throwIfNotFound: true);
         m_Player_Slot2 = m_Player.FindAction("Slot 2", throwIfNotFound: true);
         m_Player_Slot3 = m_Player.FindAction("Slot 3", throwIfNotFound: true);
@@ -639,7 +704,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_Slot5 = m_Player.FindAction("Slot 5", throwIfNotFound: true);
         m_Player_Slot6 = m_Player.FindAction("Slot 6", throwIfNotFound: true);
         m_Player_Slot7 = m_Player.FindAction("Slot 7", throwIfNotFound: true);
-        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -699,6 +763,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
+    private readonly InputAction m_Player_PauseGame;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Jump;
@@ -708,6 +773,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_UseItem;
     private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_OpenInventory;
+    private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_Slot1;
     private readonly InputAction m_Player_Slot2;
     private readonly InputAction m_Player_Slot3;
@@ -715,11 +782,11 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Slot5;
     private readonly InputAction m_Player_Slot6;
     private readonly InputAction m_Player_Slot7;
-    private readonly InputAction m_Player_Reload;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
         public PlayerActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PauseGame => m_Wrapper.m_Player_PauseGame;
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
@@ -729,6 +796,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @OpenInventory => m_Wrapper.m_Player_OpenInventory;
+        public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @Slot1 => m_Wrapper.m_Player_Slot1;
         public InputAction @Slot2 => m_Wrapper.m_Player_Slot2;
         public InputAction @Slot3 => m_Wrapper.m_Player_Slot3;
@@ -736,7 +805,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Slot5 => m_Wrapper.m_Player_Slot5;
         public InputAction @Slot6 => m_Wrapper.m_Player_Slot6;
         public InputAction @Slot7 => m_Wrapper.m_Player_Slot7;
-        public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -746,6 +814,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
+                @PauseGame.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseGame;
+                @PauseGame.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseGame;
+                @PauseGame.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseGame;
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
@@ -773,6 +844,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @OpenInventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnOpenInventory;
+                @OpenInventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnOpenInventory;
+                @OpenInventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnOpenInventory;
+                @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                 @Slot1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot1;
                 @Slot1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot1;
                 @Slot1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot1;
@@ -794,13 +871,13 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Slot7.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot7;
                 @Slot7.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot7;
                 @Slot7.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlot7;
-                @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
-                @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
-                @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @PauseGame.started += instance.OnPauseGame;
+                @PauseGame.performed += instance.OnPauseGame;
+                @PauseGame.canceled += instance.OnPauseGame;
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
@@ -828,6 +905,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @OpenInventory.started += instance.OnOpenInventory;
+                @OpenInventory.performed += instance.OnOpenInventory;
+                @OpenInventory.canceled += instance.OnOpenInventory;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
                 @Slot1.started += instance.OnSlot1;
                 @Slot1.performed += instance.OnSlot1;
                 @Slot1.canceled += instance.OnSlot1;
@@ -849,9 +932,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Slot7.started += instance.OnSlot7;
                 @Slot7.performed += instance.OnSlot7;
                 @Slot7.canceled += instance.OnSlot7;
-                @Reload.started += instance.OnReload;
-                @Reload.performed += instance.OnReload;
-                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -876,6 +956,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
+        void OnPauseGame(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
@@ -885,6 +966,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnUseItem(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnOpenInventory(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
         void OnSlot1(InputAction.CallbackContext context);
         void OnSlot2(InputAction.CallbackContext context);
         void OnSlot3(InputAction.CallbackContext context);
@@ -892,6 +975,5 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnSlot5(InputAction.CallbackContext context);
         void OnSlot6(InputAction.CallbackContext context);
         void OnSlot7(InputAction.CallbackContext context);
-        void OnReload(InputAction.CallbackContext context);
     }
 }

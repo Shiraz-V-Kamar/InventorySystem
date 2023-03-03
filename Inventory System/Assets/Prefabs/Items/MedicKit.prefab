@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 4260261385384302631}
   - component: {fileID: 1775911047577101984}
   - component: {fileID: 987384183358574367}
-  - component: {fileID: 1808632998919388883}
+  - component: {fileID: 3256920617539644241}
+  - component: {fileID: 4049616691622289495}
   m_Layer: 0
   m_Name: MedicKit
   m_TagString: Untagged
@@ -83,7 +84,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &1808632998919388883
+--- !u!95 &3256920617539644241
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6238143934710412774}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 596da4f26873f354b934fd55d16b47e5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4049616691622289495
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineColor: {r: 0, g: 0.15437102, b: 1, a: 0.39215687}
   outlineWidth: 2
   precomputeOutline: 0
   bakeKeys: []

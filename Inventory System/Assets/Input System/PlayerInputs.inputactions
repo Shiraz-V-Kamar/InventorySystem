@@ -6,6 +6,15 @@
             "id": "5f5a15ee-58af-41c7-a78b-c712673c6cb1",
             "actions": [
                 {
+                    "name": "PauseGame",
+                    "type": "PassThrough",
+                    "id": "37a273e6-de7c-4960-b76a-50bead411e3d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Move",
                     "type": "Value",
                     "id": "b14c015a-c044-40c9-a54d-ab772005ebfe",
@@ -87,6 +96,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "OpenInventory",
+                    "type": "PassThrough",
+                    "id": "aa041376-9e8e-4f7d-ba3b-a56a2bd266ec",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "f4dd362c-7400-4462-b3b1-37bc4e63f8ec",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Slot 1",
                     "type": "Value",
                     "id": "009f1d33-c078-4fb0-9751-29d96b287793",
@@ -148,15 +175,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "f4dd362c-7400-4462-b3b1-37bc4e63f8ec",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -536,6 +554,28 @@
                 },
                 {
                     "name": "",
+                    "id": "caec45e3-ea74-4afb-8ebb-481ec53f7671",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2ec77259-36b1-4500-9cb3-511439124a1d",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "4db32d2f-bdaa-4145-b9a4-121bf121382e",
                     "path": "<Keyboard>/r",
                     "interactions": "",
@@ -553,6 +593,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7961d08-2dce-4f7e-88ad-ce559b2741eb",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9c07f5a4-e670-4d6f-ba75-a50b56e276a6",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

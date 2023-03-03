@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8009328153922486522}
   - component: {fileID: 6477783450680556544}
   - component: {fileID: 3969517243033205046}
+  - component: {fileID: 2936391096869424252}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -96,11 +97,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineColor: {r: 0, g: 0.15437102, b: 1, a: 0.39215687}
   outlineWidth: 2
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!95 &2936391096869424252
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7696227118903536847}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63d4081b246d2b747a12bf763414b4bc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &2025133345539371697
 PrefabInstance:
   m_ObjectHideFlags: 0

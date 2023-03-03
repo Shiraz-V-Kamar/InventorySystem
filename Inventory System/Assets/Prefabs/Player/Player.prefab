@@ -191,8 +191,8 @@ MonoBehaviour:
   SpeedChangeRate: 10
   _sensitivity: 1
   CinemachineCameraTarget: {fileID: 3548782899685937358}
-  TopClamp: 35
-  BottomClamp: -15
+  TopClamp: 45
+  BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
   Grounded: 1
@@ -244,7 +244,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunObj: {fileID: 3548782900880401888}
-  currentItemType: 0
+  currentItem: {fileID: 0}
+  CurrentItemType: 0
   _itemDropCount: 0
   _prefabHolder: {fileID: 0}
   _dropItemSpawnPos: {fileID: 3548782899115314772}
@@ -252,8 +253,8 @@ MonoBehaviour:
   - {fileID: 7696227118903536847, guid: b902ae5725ccf904cb9ea41d1ebec429, type: 3}
   - {fileID: 4226986326631951745, guid: 98f5a6ee945be1e4188d5e73bb7958c3, type: 3}
   - {fileID: 6238143934710412774, guid: 177eb7466598ce94f93ede25958bbda2, type: 3}
-  spawnRadius: 3
-  _scatterForce: 1
+  spawnRadius: 0.5
+  _scatterForce: 0.1
 --- !u!114 &3548782899409536949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +272,7 @@ MonoBehaviour:
   _aimSensitivity: 0.4
   aimLayerMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 321
   _gun: {fileID: 3548782900880401890}
 --- !u!1 &3548782899463639534
 GameObject:
@@ -487,7 +488,7 @@ MonoBehaviour:
   shootDelay: 0.5
   _shootLayerMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 321
   _damageAmount: 1
   ImpactoffsetVal: 0
   _shootingSystem: {fileID: 3548782899862009198}

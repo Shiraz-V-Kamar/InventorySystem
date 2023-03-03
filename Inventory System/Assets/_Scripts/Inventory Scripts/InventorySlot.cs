@@ -5,6 +5,7 @@ public class InventorySlot : MonoBehaviour
 {
     public Image image;
     public Color selectedColor, notSelectedColor;
+    public int slotId;
 
     private void Awake()
     {

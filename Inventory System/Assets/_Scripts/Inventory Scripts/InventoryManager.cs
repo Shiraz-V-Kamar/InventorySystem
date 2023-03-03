@@ -12,16 +12,17 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private GameObject _inventoryItemPrefab;
 
-    private int _selectedSlot = -1;
+    private int _selectedSlot = 1;
+    
     InputsManager _inputs;
     LevelManager _levelManager;
 
-    [SerializeField] private float _itemUseTimeout;
     private bool hasGun = false;
 
 
     public Action OnSelectedSlotChanged;
     public Action<ItemType, int> OnItemDropped;
+    private bool hasBullet;
 
     private void Awake()
     {
@@ -70,6 +71,11 @@ public class InventoryManager : MonoBehaviour
             {
                 SpawnNewItem(item, _inventorySlots[i].transform);
                 return true;
+            }
+
+            if (itemInSlot != null && item.Type == ItemType.Bullets)
+            {
+                hasBullet = true;   
             }
         }
     
@@ -144,8 +150,22 @@ public class InventoryManager : MonoBehaviour
                 {
                     itemInSlot.RefreshCount();
                 }
-                _inputs.UseItemPressed = false;
             }
+            else if(item.Type == ItemType.Bullets && _levelManager.BulletCount<5 && hasGun)
+            {
+                _levelManager.SetBulletToMax();
+                itemInSlot.Count--;
+                if (itemInSlot.Count <= 0)
+                {
+                    hasBullet = false;
+                    Destroy(itemInSlot.gameObject);
+                }
+                else
+                {
+                    itemInSlot.RefreshCount();
+                }
+            }
+                _inputs.UseItemPressed = false;
         }
     }
 
@@ -159,7 +179,7 @@ public class InventoryManager : MonoBehaviour
             {
                 itemInSlot.Count--;
                 itemInSlot.RefreshCount();
-                _levelManager.SetBulletCount();
+                _levelManager.SetBulletToMax();
 
                 if (itemInSlot.Count == 0)
                 {

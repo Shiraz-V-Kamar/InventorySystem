@@ -19,6 +19,7 @@ public class InputsManager : MonoBehaviour
 
     [Header("Inventory interactions")]
     public bool InteractPressed;
+    public bool OpenInventoryPressed;
     public bool UseItemPressed;
     public bool DropItemPressed;
 
@@ -33,8 +34,9 @@ public class InputsManager : MonoBehaviour
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
 
-    public Action<bool> OnWeaponWheelEnabled;
-
+    
+    public bool PausePressed;
+    
     public static InputsManager instance;
 
 
@@ -42,6 +44,14 @@ public class InputsManager : MonoBehaviour
     {
         instance = this;
     }
+
+    public void OnPauseGame(InputValue value)
+    {
+        OnPauseGame(value.isPressed);
+    }
+
+  
+
     public void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
@@ -80,6 +90,11 @@ public class InputsManager : MonoBehaviour
     public void OnDropItem(InputValue value)
     {
         DropItem(value.isPressed);
+    }
+
+    public void OnOpenInventory(InputValue value)
+    {
+        OpenInventory(value.isPressed);
     }
 
     public void OnSlot1(InputValue value)
@@ -133,8 +148,13 @@ public class InputsManager : MonoBehaviour
 
 
 
-    // Passing Values into Public fields 
-    private void OnReloadPressed(bool isPressed)
+    // Passing Values into Public fields
+    //   private void OnPauseGame(bool isPressed)
+    private void OnPauseGame(bool isPressed)
+    {
+        PausePressed = isPressed;
+    }
+private void OnReloadPressed(bool isPressed)
     {
         ReloadPressed = isPressed;
     }
@@ -146,8 +166,10 @@ public class InputsManager : MonoBehaviour
     {
         ShootPressed = isPressed;
     }
-   
-
+    private void OpenInventory(bool isPressed)
+    {
+        OpenInventoryPressed = isPressed;
+    }
     private void DropItem(bool isPressed)
     {
         DropItemPressed = isPressed;
