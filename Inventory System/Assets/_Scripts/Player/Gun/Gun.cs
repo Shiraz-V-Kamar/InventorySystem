@@ -6,6 +6,13 @@ using Random = UnityEngine.Random;
 
 public class Gun : MonoBehaviour
 {
+    private GameObject _bulletParticleSystem;
+    private ParticleSystem _impactParticleSystem;
+    private TrailRenderer _bulletTrail;
+
+    private int _shootDistance;
+    private float _lastShootTime;
+
     [SerializeField] bool _addBulletSpread = false;
     [SerializeField] private Vector3 _bulletSpreadVariant = new Vector3(0.02f, 0.02f, 0.02f);
     [SerializeField] private Transform _bulletSpawnPoint;
@@ -14,27 +21,16 @@ public class Gun : MonoBehaviour
     [SerializeField] private int _damageAmount = 1;
     [SerializeField] float ImpactoffsetVal = 0;
     [SerializeField] private ParticleSystem _shootingSystem;
-
-    private GameObject _bulletParticleSystem;
-    private ParticleSystem _impactParticleSystem;
-    private TrailRenderer _bulletTrail;
-
-    private int _shootDistance;
-    private float _lastShootTime;
-
     [SerializeField] private WeaponScriptableObject _weaponScriptableObject;
-
 
     private LevelManager _levelManager;
     //AudioManager _audioManager;
 
-    public Action OnShootDecreaseBulletCount;
     public Action<bool> OnGettingTargetInAim;
 
     private void Start()
     {
         //_audioManager = AudioManager.instance;
-        //playerCollisions.OnCollecting += SetBulletCount;
         _levelManager = LevelManager.instance;
         SetupWeaponDetails(_weaponScriptableObject);
     }
@@ -43,7 +39,6 @@ public class Gun : MonoBehaviour
         _bulletParticleSystem = element.BulletParticleSystem;
         _impactParticleSystem = element.ImpactParticleSystem;
         _bulletTrail = element.BulletTrail;
-
         _shootDistance = element.ShootDistance;
     }
     public void Shoot()
@@ -54,6 +49,7 @@ public class Gun : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         RaycastHit hit;
 
+        // Checks to see if there are boject which can be shot in the layer
         if (Physics.Raycast(ray, out hit, _shootDistance, _shootLayerMask))
         {
             if (_lastShootTime + shootDelay < Time.time && _levelManager.BulletCount > 0)
@@ -61,9 +57,9 @@ public class Gun : MonoBehaviour
                 _shootingSystem.Play();
                 // Play the sound
                 //_audioManager.PlaySound("Element Projectile");
-                OnShootDecreaseBulletCount?.Invoke();
                 _levelManager.DecrementBulletCount();
 
+                // Instantiates a trail and particle which moves towards hit point
                 TrailRenderer trail = Instantiate(_bulletTrail, _bulletSpawnPoint.position, Quaternion.identity);
                 trail.enabled = false;
                 GameObject trailParticle = Instantiate(_bulletParticleSystem, _bulletSpawnPoint.position, Quaternion.identity, trail.transform.parent);
@@ -72,8 +68,6 @@ public class Gun : MonoBehaviour
                 StartCoroutine(SpawnTrail(trail, hit, trailParticle));
                 // Damage the hit item 
                 _lastShootTime = Time.time;
-                
-                
             }
         }
                 OnGettingTargetInAim?.Invoke(false);
@@ -92,32 +86,29 @@ public class Gun : MonoBehaviour
 
             yield return null;
         }
-
         trail.transform.position = hit.point;
 
         Vector3 offsetPos = new Vector3(hit.point.x, hit.point.y, hit.point.z - ImpactoffsetVal);
-
-        //PlayImapctSound
-        //Play normal impact
+        
+        // if the item hit is cctv camera play imapct particle system and destory after dureation
         if (hit.collider.tag == Helper.CAMERA_TAG)
         {
             OnGettingTargetInAim?.Invoke(true);
             // Destroyed particle system
             HandleStreetCam cam = hit.collider.GetComponent<HandleStreetCam>();
             cam.DealDamage();
+            //PlayImapctSound
             Instantiate(_impactParticleSystem, offsetPos, Quaternion.LookRotation(hit.normal));
         }
-
-
         Destroy(trail.gameObject, trail.time);
         Destroy(trailParticle.gameObject, trail.time);
-
     }
 
+
+    // To randomize the gun bullet spread
     private Vector3 GetDirection()
     {
         Vector3 direction = transform.forward;
-
         if (_addBulletSpread)
         {
             direction += new Vector3(
@@ -128,7 +119,6 @@ public class Gun : MonoBehaviour
 
             direction.Normalize();
         }
-
         return direction;
     }
 

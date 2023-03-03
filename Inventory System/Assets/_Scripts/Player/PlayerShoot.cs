@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerShoot : MonoBehaviour
 {
+    private bool _hasGun;
     [SerializeField] private CinemachineVirtualCamera _aimCamera;
 
     [SerializeField] private float _normalSensitivity = 1f;
@@ -17,11 +18,7 @@ public class PlayerShoot : MonoBehaviour
     private InventoryManager _inventoryManager;
     private LevelManager _levelManager;
     private PlayerHandleItem _playerHandleItem;
-
-
     [SerializeField] private Gun _gun;
-   
-    private bool hasGun;
 
     public Action<bool> OnAimingAtCamera;
     private void Start()
@@ -41,20 +38,14 @@ public class PlayerShoot : MonoBehaviour
 
     private void IsHoldingGun(bool obj)
     {
-        hasGun = obj;
+        _hasGun = obj;
     }
 
     private void Update()
     {
-        
         ToggleAimAndNormalCamera();
-
         Shooting();
-
-        Reloading();
-
-       
-        
+        Reloading(); 
     }
 
     private void ToggleAimAndNormalCamera()
@@ -96,7 +87,7 @@ public class PlayerShoot : MonoBehaviour
 
     private void Reloading()
     {
-        if (_inputs.ReloadPressed && hasGun)
+        if (_inputs.ReloadPressed && _hasGun)
         {
             if (_levelManager.BulletCount < 5)
             {

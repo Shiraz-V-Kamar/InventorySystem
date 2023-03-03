@@ -52,9 +52,6 @@ public class PlayerMovementInput : MonoBehaviour
     public LayerMask GroundLayers;
     #endregion
 
-    private InputsManager _input;
-    private CharacterController _controller;
-
     #region Player Anim
     [Header("Player Animation")]
     [Space(10)]
@@ -76,8 +73,10 @@ public class PlayerMovementInput : MonoBehaviour
 
     public bool _hasAnimator;
     #endregion
-    private PlayerInput _playerInput;
 
+    private InputsManager _input;
+    private CharacterController _controller;
+    private PlayerInput _playerInput;
     private PlayerJump _playerJump;
 
 
@@ -96,15 +95,19 @@ public class PlayerMovementInput : MonoBehaviour
     void Start()
     {
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+
         _input = InputsManager.instance;
         _controller = GetComponent<CharacterController>();
         _playerInput = InputsManager.instance.gameObject.GetComponent<PlayerInput>();
         _playerJump = GetComponent<PlayerJump>();
+
         if (_playerJump != null)
             _playerJump.OnAddingGravity += AddingGravity;
         else
             _verticalVelocity = -15.0f;
 
+
+        // If player has humanoid mesh use animator
         if (_animator != null)
         {
             _hasAnimator = true;
@@ -126,17 +129,6 @@ public class PlayerMovementInput : MonoBehaviour
     private void AddingGravity(float jumpFloat)
     {
         _verticalVelocity = jumpFloat;
-    }
-
-    private bool IsCurrentDeviceMouse
-    {
-        get
-        {
-            if (_playerInput != null)
-                return _playerInput.currentControlScheme == "KeyboardMouse";
-            else
-                return false;
-        }
     }
 
     void Update()

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ItemInWorld : MonoBehaviour, ICollectable
@@ -8,25 +7,22 @@ public class ItemInWorld : MonoBehaviour, ICollectable
     private BoxCollider _collider;
 
     private bool _grounded;
+
     [SerializeField]private float _groundedRadius;
-    [SerializeField] private LayerMask _groundLayers;
     [SerializeField]private float _groundedOffset;
+    [SerializeField] private LayerMask _groundLayers;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _collider = GetComponent<BoxCollider>();
     }
-    public void Collect()
-    {
-        bool result = InventoryManager.Instance.AddItem(item);
-        if(result)
-            Destroy(gameObject);
-    }
-
     private void Update()
     {
         GroundedCheck();
+
+        // Object is spawned with gravity effecting it
+        // The values are changed when it comes in contact with ground
         if (_grounded)
         {
             _rb.isKinematic = true;
@@ -35,7 +31,6 @@ public class ItemInWorld : MonoBehaviour, ICollectable
             transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
@@ -43,7 +38,26 @@ public class ItemInWorld : MonoBehaviour, ICollectable
             Collect();
         }
     }
+    public void Collect()
+    {
+        bool result = InventoryManager.Instance.AddItem(item);
 
+        if (result) Destroy(gameObject);
+        // give visual feedback to player why its not pickable Slot full / Unique item
+    }
+
+    private void GroundedCheck()
+    {
+        // set sphere position to check ground collision, with offset
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - _groundedOffset, transform.position.z);
+        _grounded = Physics.CheckSphere(spherePosition, _groundedRadius, _groundLayers, QueryTriggerInteraction.Ignore);
+
+        // When object stops moving/ not falling, Reset rotation
+        if (_rb.velocity.magnitude == 0)
+        {
+            transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
     private void OnDrawGizmosSelected()
     {
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
@@ -53,17 +67,6 @@ public class ItemInWorld : MonoBehaviour, ICollectable
         else Gizmos.color = transparentRed;
 
         // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - _groundedOffset, transform.position.z),_groundedRadius);
-    }
-
-    private void GroundedCheck()
-    {
-        // set sphere position, with offset
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - _groundedOffset, transform.position.z);
-        _grounded = Physics.CheckSphere(spherePosition, _groundedRadius, _groundLayers, QueryTriggerInteraction.Ignore);
-        if(_rb.velocity.magnitude==0)
-        {
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
-        }
+        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - _groundedOffset, transform.position.z), _groundedRadius);
     }
 }

@@ -1,34 +1,35 @@
-using JetBrains.Annotations;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class PlayerHandleItem : MonoBehaviour
 {
+
+    [SerializeField]private GameObject _gunObj;
+    [SerializeField]private int _itemDropCount;
+    [SerializeField]private Transform _prefabHolder;
+    [SerializeField]private Transform _dropItemSpawnPos;
+    [SerializeField]private GameObject[] _objPrefab;
+
+    [SerializeField] private float _scatterForce;
+    [SerializeField]private float spawnRadius = 5f;
+
+    [HideInInspector]public ItemScriptableObject currentItem;
+    private ItemType CurrentItemType;
+
+    // Scripts
     InventoryManager _inventoryManager;
     InputsManager _inputs;
     LevelManager _levelManager;
 
-    [SerializeField] private GameObject _gunObj;
-
-    [HideInInspector]public ItemScriptableObject currentItem;
-    private int ItemDropCount;
-
-    public ItemType CurrentItemType;
-    [SerializeField]private int _itemDropCount;
-    [SerializeField] private Transform _prefabHolder;
-    [SerializeField] private Transform _dropItemSpawnPos;
-    [SerializeField] private GameObject[] _objPrefab;
-    [SerializeField]private float spawnRadius = 5f;
-
-    [SerializeField] private float _scatterForce;
-
+    // Delegates
     public Action<bool> OnHoldingGun;
     private void Start()
     {
         _inventoryManager = InventoryManager.Instance;
         _inputs = InputsManager.instance;
         _levelManager = LevelManager.instance;
+
         _inventoryManager.OnSelectedSlotChanged += SelectTheItem;
         _inventoryManager.OnItemDropped += ItemDroped;
     }
@@ -36,16 +37,6 @@ public class PlayerHandleItem : MonoBehaviour
     {
         _inventoryManager.OnSelectedSlotChanged -= SelectTheItem;
         _inventoryManager.OnItemDropped -= ItemDroped;
-    }
-    private void ItemDroped(ItemType type,int dropCount)
-    {
-        CurrentItemType = type;
-        _itemDropCount = dropCount;
-        GetSelectedItem();
-    }
-    private void SelectTheItem()
-    {
-        GetSelectedItem();
     }
 
     private void Update()
@@ -58,12 +49,20 @@ public class PlayerHandleItem : MonoBehaviour
         {
             DropSelectedItem();
         }
-        
     }
-
-   
+    private void ItemDroped(ItemType type, int dropCount)
+    {
+        CurrentItemType = type;
+        _itemDropCount = dropCount;
+        GetSelectedItem();
+    }
+    private void SelectTheItem()
+    {
+        GetSelectedItem();
+    }
     public void GetSelectedItem()
     {
+        // Allows the player to equip gun which is primary items
         currentItem = _inventoryManager.GetSelectedItem();
         if (currentItem != null)
         { 
@@ -78,11 +77,11 @@ public class PlayerHandleItem : MonoBehaviour
                 OnHoldingGun?.Invoke(false);
             }
 
-            if(currentItem.Type == ItemType.Bullets && _levelManager.BulletCount==0 && _gunObj.activeSelf)
+            // if the player has not loaded bullets and gun 
+            if(currentItem.Type == ItemType.Bullets && _levelManager.BulletCount==0 && _inventoryManager.hasGun)
             {
                 _inventoryManager.UseBulletItem();
             }
-
         }else
         {
              OnHoldingGun?.Invoke(false);
@@ -92,6 +91,7 @@ public class PlayerHandleItem : MonoBehaviour
 
     public void DropSelectedItem()
     {   
+        // Checks selected item type and instantiares respective prefabs
         _inventoryManager.DropSelectedItem();
 
         if (_itemDropCount > 0)
@@ -119,6 +119,7 @@ public class PlayerHandleItem : MonoBehaviour
 
     private void ScatterDroppedItem(GameObject Prefab, int SpawnCount)
     {
+        // Instantiate items, according to the number of items dropped
         for (int i = 0; i < SpawnCount; i++)
         {
             Vector3 randomDir = _dropItemSpawnPos.position + Random.insideUnitSphere * spawnRadius;

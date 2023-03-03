@@ -4,19 +4,12 @@ using UnityEngine.Windows;
 
 public class PlayerJump : MonoBehaviour
 {
-    PlayerMovementInput playerMovementInput;
     public bool Grounded;
 
-    
-
-    // timeout deltatime
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
     private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
-
-
-    private InputsManager _input;
 
     [Space(10)]
     public float JumpHeight = 1.2f;
@@ -40,9 +33,11 @@ public class PlayerJump : MonoBehaviour
     
     #endregion
 
-    #region Events
+    
     public Action<float> OnAddingGravity;
-    #endregion
+
+    private InputsManager _input;
+    PlayerMovementInput playerMovementInput;
     private void Start()
     {
         playerMovementInput = GetComponent<PlayerMovementInput>();
@@ -76,11 +71,11 @@ public class PlayerJump : MonoBehaviour
             _fallTimeoutDelta = FallTimeout;
 
             // update animator if using character
-     /*       if (_jumphasAnimator)
+            if (_jumphasAnimator)
             {
                 _animator.SetBool(_animIDJump, false);
                 _animator.SetBool(_animIDFreeFall, false);
-            }*/
+            }
 
             // stop our velocity dropping infinitely when grounded
             if (_verticalVelocity < 0.0f)
@@ -95,10 +90,10 @@ public class PlayerJump : MonoBehaviour
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
                 // update animator if using character
-             /*   if (_jumphasAnimator)
+                if (_jumphasAnimator)
                 {
                     _animator.SetBool(_animIDJump, true);
-                }*/
+                }
             }
             
 
@@ -123,10 +118,10 @@ public class PlayerJump : MonoBehaviour
             else
             {
                 // update animator if using character
-                /*if (_jumphasAnimator)
+                if (_jumphasAnimator)
                 {
                     _animator.SetBool(_animIDFreeFall, true);
-                }*/
+                }
             }
 
             // if we are not grounded, do not jump

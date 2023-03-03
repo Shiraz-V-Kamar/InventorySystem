@@ -11079,6 +11079,7 @@ MonoBehaviour:
   - {fileID: 1627830530}
   _inventoryItemPrefab: {fileID: 7051615179966090265, guid: d603b57ee2c52004981c369145f77b16,
     type: 3}
+  hasGun: 0
   hasBullet: 0
 --- !u!4 &879497372 stripped
 Transform:

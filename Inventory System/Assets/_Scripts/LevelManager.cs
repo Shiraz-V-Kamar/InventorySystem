@@ -1,19 +1,22 @@
-using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager instance;
+    private float _camerasDestroyedCount;
+    private float _camerasToDestroyedCount;
 
     public int BulletCount { get; private set; }
     private int MaxBulletCount = 5;
 
-    private bool _isHoldingGun;
+    private bool _isHoldingGun; 
+    private bool _isGameOver;
+    private bool isInventoryOpen;
+    private bool isGamePaused;
+    private bool _gameWon;
+    private bool _changeCrosshairColor;
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI _bulletCountText;
@@ -34,12 +37,8 @@ public class LevelManager : MonoBehaviour
     InventoryManager _inventoryManager;
     InputsManager _inputs;
 
-
     [SerializeField] private GameObject[] _cameraObjs;
 
-    private float _camerasDestroyedCount;
-    private float _camerasToDestroyedCount;
-    
     [Header("Items")]
     [SerializeField]private BulletScriptableObject bulletScriptableObject;
     [SerializeField]private WeaponScriptableObject weaponScriptableObject;
@@ -55,12 +54,8 @@ public class LevelManager : MonoBehaviour
 
     public ItemType _currentItemType;
     public GameStates CurrentState;
-    private bool _isGameOver;
-    private bool isInventoryOpen;
-    private bool isGamePaused;
-    private bool _gameWon;
-    private bool _changeCrosshairColor;
 
+    public static LevelManager instance;
     private void Awake()
     {
         instance = this;
@@ -71,13 +66,13 @@ public class LevelManager : MonoBehaviour
         _inputs = InputsManager.instance;
         _inventoryManager = InventoryManager.Instance;
 
-        //reseting timescale of GameOver
+        //reseting timescale after Gamover / GameWon / Pause 
         Time.timeScale = 1;
 
         _playerHandlItem.OnHoldingGun += PlayerIsHoldingGun;
         _playerShoot.OnAimingAtCamera += ChangeCrosshairColor;
 
-
+        // Enum helps changing between panels easier
         CurrentState = GameStates.InGame;
         _camerasToDestroyedCount = _cameraObjs.Length;
     }
@@ -91,7 +86,7 @@ public class LevelManager : MonoBehaviour
         SetUITexts();
         EnableAndDisableCrosshair();
 
-
+        // Game Win Condition
         if (_camerasToDestroyedCount < 1)
         {
             GameCompleted();
@@ -122,12 +117,14 @@ public class LevelManager : MonoBehaviour
         }
 
         ToggleUIPanel(CurrentState);
+
+        // helps the player to see what the current item is 
         SetCurrentItemImage();
     }
 
     private void SetCurrentItemImage()
     {
-
+        // Depending on the itemtype the image,name changes
         ItemScriptableObject currentItem= _inventoryManager.GetSelectedItem();
         if (currentItem != null)
         {
@@ -166,6 +163,7 @@ public class LevelManager : MonoBehaviour
     {
         _isHoldingGun = obj;
     }
+
     private void ChangeCrosshairColor(bool obj)
     {
         _changeCrosshairColor = obj;
@@ -190,10 +188,13 @@ public class LevelManager : MonoBehaviour
 
     private void ToggleUIPanel(GameStates state)
     {
+        // Disables all the panels
         foreach (var panel in _allPanel)
         {
             panel.SetActive(false);
         }
+
+        // Enables the appropriate panel
         if (state == GameStates.Pause)
         {
             _allPanel[(int)state].SetActive(isGamePaused);
@@ -207,7 +208,6 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-
             _allPanel[(int)state].SetActive(true);
         }
     }
@@ -265,6 +265,7 @@ public class LevelManager : MonoBehaviour
             _crosshairImage.enabled = false;
         }
     }
+
     private void OpenInventory()
     {
         isInventoryOpen = !isInventoryOpen;

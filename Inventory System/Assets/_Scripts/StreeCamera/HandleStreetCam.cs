@@ -3,14 +3,13 @@ using UnityEngine;
 public class HandleStreetCam : MonoBehaviour
 {
     private float health = 10;
+    private bool _isCameraDamaged = false;
     [SerializeField] private ParticleSystem _fireParticleSystem;
 
-    private bool _isCameraDamaged = false;
-
-    LevelManager levelManager;
-    Timer timer;
     [SerializeField] private Outline _outline;
 
+    Timer timer;
+    LevelManager levelManager;
     private void Start()
     {
         levelManager = LevelManager.instance;
@@ -23,6 +22,9 @@ public class HandleStreetCam : MonoBehaviour
 
     private void Update()
     {
+        // when damaging the camera play fire particle system
+        // disable the outline or set outline width to '0'
+        // add time to timer
         if (health < 1 && _isCameraDamaged == false)
         {
             health = 0;

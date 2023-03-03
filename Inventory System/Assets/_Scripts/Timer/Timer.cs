@@ -13,17 +13,43 @@ public class Timer : MonoBehaviour
     [SerializeField] private float _timerDecrement;
     [SerializeField] private float _timerIncrement;
 
-    public static Timer Instance;
-    private Coroutine _timerCorutine; //my co-routine
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private Image _timerImage;
 
+    private Coroutine _timerCorutine; //my co-routine
     LevelManager _levelManager;
-    
-    
+    public static Timer Instance;
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        _timerImage.fillAmount = _timer / _timer;
+        StartTimer();
+        _levelManager = LevelManager.instance;
+    }
+    private IEnumerator MissionTimer()
+    {
+        //Subtracts 1 every second and the timer value is convered in minutes and seconds
+        while (_timer > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            _timer -= 1;
+            float minutes = Mathf.FloorToInt(_timer / 60);
+            float seconds = Mathf.FloorToInt(_timer % 60);
+            _timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
+            _timerImage.fillAmount = _timer / _timerMax;
+        }
+        if (_timer < 1)
+        {
+            TimeOver();
+        }
+    }
+    private void TimeOver()
+    {
+        _levelManager.GameOver();
     }
     public void ReduceTime()
     {
@@ -35,7 +61,6 @@ public class Timer : MonoBehaviour
         }
     }
 
-
     public void AddTime()
     {
         _timer += _timerIncrement; 
@@ -45,32 +70,9 @@ public class Timer : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        _timerImage.fillAmount = _timer/_timer;
-        StartTimer();
-        _levelManager = LevelManager.instance;
-    }
     public void StartTimer()
     {
-        _timerCorutine = StartCoroutine(EnergyTimer());
-    }
-
-    private IEnumerator EnergyTimer()
-    {
-        while (_timer > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            _timer -= 1;
-            float minutes = Mathf.FloorToInt(_timer / 60);
-            float seconds = Mathf.FloorToInt(_timer % 60);
-            _timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
-            _timerImage.fillAmount = _timer / _timerMax;
-        }
-        if(_timer<1)
-        {
-            TimeOver();
-        }
+        _timerCorutine = StartCoroutine(MissionTimer());
     }
 
     public void PauseTimer()
@@ -78,9 +80,6 @@ public class Timer : MonoBehaviour
         StopCoroutine(_timerCorutine);
     }
 
-    private void TimeOver()
-    {
-        _levelManager.GameOver();
-    }
+  
 
 }

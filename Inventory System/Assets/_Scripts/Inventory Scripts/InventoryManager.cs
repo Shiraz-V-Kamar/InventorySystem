@@ -3,25 +3,22 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance;
-
-    [SerializeField] private InventorySlot[] _inventorySlots;
-    [SerializeField] private GameObject _inventoryItemPrefab;
-
     private int MaxStackedItems = 5;
     private int _selectedSlot = 1;
     
-    private bool hasGun = false;
-    
-    InputsManager _inputs;
-    LevelManager _levelManager;
+    [SerializeField] private InventorySlot[] _inventorySlots;
+    [SerializeField] private GameObject _inventoryItemPrefab;
 
-
+    public bool hasGun = false;
+    public bool hasBullet= false;
 
     public Action OnSelectedSlotChanged;
     public Action<ItemType, int> OnItemDropped;
-    public bool hasBullet= false;
 
+    InputsManager _inputs;
+    LevelManager _levelManager;
+
+    public static InventoryManager Instance;
     private void Awake()
     {
         Instance = this;
@@ -71,6 +68,7 @@ public class InventoryManager : MonoBehaviour
                 return true;
             }
 
+            //To Check if the player has collected any bullets which can be used to show bullet icons
             if (itemInSlot != null && item.Type == ItemType.Bullets)
             {
                 hasBullet = true;   
@@ -83,14 +81,11 @@ public class InventoryManager : MonoBehaviour
         InventoryItem itemInSlotOne = _inventorySlots[0].GetComponentInChildren<InventoryItem>();
         if (itemInSlotOne == null)
         {
-
             SpawnNewItem(item, firstSlot);
 
             ChangeSelectedSlot(0);
             OnSelectedSlotChanged?.Invoke();
             return true;
-
-
         }
         else
         {
@@ -100,6 +95,7 @@ public class InventoryManager : MonoBehaviour
     }
     void ChangeSelectedSlot(int Value)
     {
+        // disables all the slots and activates desired slot
         if (_selectedSlot >= 0)
         {
             _inventorySlots[_selectedSlot].Deselect();
@@ -118,6 +114,7 @@ public class InventoryManager : MonoBehaviour
 
     public ItemScriptableObject GetSelectedItem()
     {
+        // Checking the selected slot and returning item info
         InventorySlot slot = _inventorySlots[_selectedSlot];
         InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
 
@@ -150,6 +147,7 @@ public class InventoryManager : MonoBehaviour
                     itemInSlot.RefreshCount();
                 }
             }
+            // Only allows the player to use the bullets if the player has gun and bulle count is less than 5
             else if(item.Type == ItemType.Bullets && _levelManager.BulletCount<5 && hasGun)
             {
                 _levelManager.SetBulletToMax();
@@ -191,6 +189,8 @@ public class InventoryManager : MonoBehaviour
 
     public void DropSelectedItem()
     {
+        // Item type of dropped item and count is passed to the subscriber 
+        // This allows us to instantiate the items which are dropped
         _inputs.DropItemPressed = false;
         InventorySlot slot = _inventorySlots[_selectedSlot];
         InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();

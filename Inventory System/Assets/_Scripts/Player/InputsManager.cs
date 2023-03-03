@@ -23,10 +23,8 @@ public class InputsManager : MonoBehaviour
     public bool UseItemPressed;
     public bool DropItemPressed;
 
-    
     public bool Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Slot7;
     
-
     [Header("Movement Settings")]
     public bool analogMovement;
 
@@ -34,11 +32,9 @@ public class InputsManager : MonoBehaviour
    /* public bool cursorLocked = true;*/
     public bool cursorInputForLook = true;
 
-    
     public bool PausePressed;
     
     public static InputsManager instance;
-
 
     private void Awake()
     {
@@ -49,8 +45,6 @@ public class InputsManager : MonoBehaviour
     {
         OnPauseGame(value.isPressed);
     }
-
-  
 
     public void OnMove(InputValue value)
     {
@@ -149,7 +143,6 @@ public class InputsManager : MonoBehaviour
 
 
     // Passing Values into Public fields
-    //   private void OnPauseGame(bool isPressed)
     private void OnPauseGame(bool isPressed)
     {
         PausePressed = isPressed;
@@ -235,14 +228,16 @@ private void OnReloadPressed(bool isPressed)
 
     }
 
-/*    private void OnApplicationFocus(bool hasFocus)
-    {
-        SetCursorState(cursorLocked);
-    }*/
+    #region CursorLock 
+    /*    private void OnApplicationFocus(bool hasFocus)
+        {
+            SetCursorState(cursorLocked);
+        }
 
-  /*  private void SetCursorState(bool newState)
-    {
-        Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-    }*/
+        private void SetCursorState(bool newState)
+        {
+            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+        }*/
+    #endregion
 }
 
