@@ -22,7 +22,7 @@ public class PlayerMovementInput : MonoBehaviour
     private float _targetRotation = 0.0f;
     private float _rotationVelocity;
     private float _verticalVelocity;
-    public float _sensitivity = 1f;
+    public float _sensitivity = 0.5f;
 
     private bool _rotateOnMove = true;
     #endregion

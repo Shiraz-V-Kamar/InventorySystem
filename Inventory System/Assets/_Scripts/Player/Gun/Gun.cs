@@ -24,13 +24,13 @@ public class Gun : MonoBehaviour
     [SerializeField] private WeaponScriptableObject _weaponScriptableObject;
 
     private LevelManager _levelManager;
-    //AudioManager _audioManager;
+    AudioManager _audioManager;
 
     public Action<bool> OnGettingTargetInAim;
 
     private void Start()
     {
-        //_audioManager = AudioManager.instance;
+        _audioManager = AudioManager.instance;
         _levelManager = LevelManager.instance;
         SetupWeaponDetails(_weaponScriptableObject);
     }
@@ -56,7 +56,7 @@ public class Gun : MonoBehaviour
             {
                 _shootingSystem.Play();
                 // Play the sound
-                //_audioManager.PlaySound("Element Projectile");
+                _audioManager.PlaySound(Helper.GUN_SHOOT_SOUND);
                 _levelManager.DecrementBulletCount();
 
                 // Instantiates a trail and particle which moves towards hit point
@@ -99,6 +99,7 @@ public class Gun : MonoBehaviour
             cam.DealDamage();
             //PlayImapctSound
             Instantiate(_impactParticleSystem, offsetPos, Quaternion.LookRotation(hit.normal));
+            
         }
         Destroy(trail.gameObject, trail.time);
         Destroy(trailParticle.gameObject, trail.time);

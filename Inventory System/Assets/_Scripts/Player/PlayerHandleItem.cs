@@ -21,11 +21,13 @@ public class PlayerHandleItem : MonoBehaviour
     InventoryManager _inventoryManager;
     InputsManager _inputs;
     LevelManager _levelManager;
+    AudioManager _audioManager;
 
     // Delegates
     public Action<bool> OnHoldingGun;
     private void Start()
     {
+        _audioManager = AudioManager.instance;
         _inventoryManager = InventoryManager.Instance;
         _inputs = InputsManager.instance;
         _levelManager = LevelManager.instance;
@@ -92,9 +94,9 @@ public class PlayerHandleItem : MonoBehaviour
     public void DropSelectedItem()
     {   
         // Checks selected item type and instantiares respective prefabs
-        _inventoryManager.DropSelectedItem();
+        bool canDropItem = _inventoryManager.DropSelectedItem();
 
-        if (_itemDropCount > 0)
+        if (_itemDropCount > 0 && canDropItem)
         {
             switch (CurrentItemType)
             {
@@ -122,6 +124,7 @@ public class PlayerHandleItem : MonoBehaviour
         // Instantiate items, according to the number of items dropped
         for (int i = 0; i < SpawnCount; i++)
         {
+            _audioManager.PlaySound(Helper.DROP_ITEMS);
             Vector3 randomDir = _dropItemSpawnPos.position + Random.insideUnitSphere * spawnRadius;
             if (randomDir.y < transform.position.y) // check if spawn position is below player
             {

@@ -15,8 +15,9 @@ public class InventoryManager : MonoBehaviour
     public Action OnSelectedSlotChanged;
     public Action<ItemType, int> OnItemDropped;
 
-    InputsManager _inputs;
-    LevelManager _levelManager;
+    private InputsManager _inputs;
+    private LevelManager _levelManager;
+    private AudioManager _audioManager;
 
     public static InventoryManager Instance;
     private void Awake()
@@ -39,7 +40,7 @@ public class InventoryManager : MonoBehaviour
     {
         _inputs = InputsManager.instance;
         _levelManager = LevelManager.instance;
-
+        _audioManager =AudioManager.instance;
     }
 
     private void Update()
@@ -85,6 +86,7 @@ public class InventoryManager : MonoBehaviour
 
             ChangeSelectedSlot(0);
             OnSelectedSlotChanged?.Invoke();
+            hasGun = true;
             return true;
         }
         else
@@ -177,28 +179,28 @@ public class InventoryManager : MonoBehaviour
                 itemInSlot.Count--;
                 itemInSlot.RefreshCount();
                 _levelManager.SetBulletToMax();
-
+                _audioManager.PlaySound(Helper.GUN_RELOAD_SOUND);
                 if (itemInSlot.Count == 0)
                 {
-                    Destroy(itemInSlot.gameObject);
+                    DestroyImmediate(itemInSlot.gameObject);
                 }
                 break;
             }
         }
     }
 
-    public void DropSelectedItem()
+    public bool DropSelectedItem()
     {
         // Item type of dropped item and count is passed to the subscriber 
         // This allows us to instantiate the items which are dropped
         _inputs.DropItemPressed = false;
+        
         InventorySlot slot = _inventorySlots[_selectedSlot];
         InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
         if (itemInSlot != null)
         {
             ItemScriptableObject item = itemInSlot.Item;
             int count = itemInSlot.Count;
-
             OnItemDropped?.Invoke(item.Type, count);
             if (item.Type == ItemType.Gun)
             {
@@ -206,6 +208,9 @@ public class InventoryManager : MonoBehaviour
             }
             DestroyImmediate(itemInSlot.gameObject);
             ChangeSelectedSlot(_selectedSlot);
+            return true ;
         }
+            return false;
+
     }
 }

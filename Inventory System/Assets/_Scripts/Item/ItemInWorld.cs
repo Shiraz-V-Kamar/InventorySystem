@@ -12,8 +12,11 @@ public class ItemInWorld : MonoBehaviour, ICollectable
     [SerializeField]private float _groundedOffset;
     [SerializeField] private LayerMask _groundLayers;
 
+    AudioManager audioManager;
     private void Start()
     {
+        audioManager = AudioManager.instance;
+
         _rb = GetComponent<Rigidbody>();
         _collider = GetComponent<BoxCollider>();
     }
@@ -42,7 +45,14 @@ public class ItemInWorld : MonoBehaviour, ICollectable
     {
         bool result = InventoryManager.Instance.AddItem(item);
 
-        if (result) Destroy(gameObject);
+        if (result)
+        {
+            audioManager.PlaySound(Helper.PICK_UP_ITEMS);
+            Destroy(gameObject);
+        }else
+        {
+
+        }
         // give visual feedback to player why its not pickable Slot full / Unique item
     }
 

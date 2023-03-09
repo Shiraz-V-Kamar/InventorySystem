@@ -18,11 +18,13 @@ public class PlayerShoot : MonoBehaviour
     private InventoryManager _inventoryManager;
     private LevelManager _levelManager;
     private PlayerHandleItem _playerHandleItem;
+    private AudioManager _audioManager;
     [SerializeField] private Gun _gun;
 
     public Action<bool> OnAimingAtCamera;
     private void Start()
     {
+        _audioManager = AudioManager.instance;
         _inputs = InputsManager.instance;
         _inventoryManager = InventoryManager.Instance;
         _levelManager = LevelManager.instance;
@@ -92,6 +94,7 @@ public class PlayerShoot : MonoBehaviour
             if (_levelManager.BulletCount < 5)
             {
                 _inventoryManager.UseBulletItem();
+                
             }
             _inputs.ReloadPressed = false;
         }
@@ -100,8 +103,10 @@ public class PlayerShoot : MonoBehaviour
     private void Shooting()
     {
 
-        if (_inputs.ShootPressed)
+        if (_inputs.ShootPressed && _inventoryManager.hasGun)
         {
+            if(_levelManager.BulletCount<1)
+                _audioManager.PlaySound(Helper.FIRE_WITH_NO_BULLETS);
             _gun.Shoot();
             _inputs.ShootPressed = false;
         }

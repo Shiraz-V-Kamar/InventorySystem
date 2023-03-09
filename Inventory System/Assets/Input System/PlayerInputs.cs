@@ -414,7 +414,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""id"": ""85b673f1-8ff7-47b3-b78a-4e8ec9074057"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""InvertVector2(invertX=false)"",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,

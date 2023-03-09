@@ -34,8 +34,9 @@ public class LevelManager : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] PlayerHandleItem _playerHandlItem;
     [SerializeField] PlayerShoot _playerShoot;
-    InventoryManager _inventoryManager;
-    InputsManager _inputs;
+    private InventoryManager _inventoryManager;
+    private InputsManager _inputs;
+    private AudioManager _audioManager;
 
     [SerializeField] private GameObject[] _cameraObjs;
 
@@ -63,6 +64,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        _audioManager = AudioManager.instance;
         _inputs = InputsManager.instance;
         _inventoryManager = InventoryManager.Instance;
 
@@ -231,16 +233,6 @@ public class LevelManager : MonoBehaviour
     private void SetUITexts()
     {
         _bulletCountText.text = BulletCount.ToString();
-        if(BulletCount<1)
-        {
-            _bulletCountText.color = Color.red;
-            _helperText.text = "Reload";
-        }
-        else
-        {
-            _bulletCountText.color = Color.white;
-            _helperText.text = "";
-        }
        
         _camerasToDestroyedCountText.text = _camerasToDestroyedCount.ToString();
         _gameOverCameraDestroyedCountText.text = _camerasDestroyedCount.ToString();
@@ -271,10 +263,12 @@ public class LevelManager : MonoBehaviour
         isInventoryOpen = !isInventoryOpen;
         if (isInventoryOpen)
         {
+            _audioManager.PlaySound(Helper.INVENTORY_OPEN);
             CurrentState = GameStates.Inventory;
         }
         else
         {
+            _audioManager.PlaySound(Helper.INVENTORY_CLOSE);
             CurrentState = GameStates.InGame;
         }
     }

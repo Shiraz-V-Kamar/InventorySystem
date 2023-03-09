@@ -67,10 +67,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 7440fca0b2d44b04c9cc20d24430e981, type: 2}
   _groundedRadius: 0.5
+  _groundedOffset: -0.8
   _groundLayers:
     serializedVersion: 2
     m_Bits: 64
-  _groundedOffset: -0.8
 --- !u!65 &987384183358574367
 BoxCollider:
   m_ObjectHideFlags: 0
